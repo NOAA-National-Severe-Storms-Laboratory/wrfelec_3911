@@ -15,3 +15,4 @@
 
 # Exceptions to top-level .gitignore: many external/ source code files use .f90 extension
 !*.f90
+!*.F
