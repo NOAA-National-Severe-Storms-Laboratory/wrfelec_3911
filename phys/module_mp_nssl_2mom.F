@@ -1999,7 +1999,7 @@ SUBROUTINE nssl_2mom_driver(qv, qc, qr, qi, qs, qh, qhl, ccw, crw, cci, csw, chw
            IF ( present( cn ) ) THEN
             an(ix,1,kz,lccn) = cn(ix,kz,jy)
            ELSE
-            IF ( lccna == 0 .and. ( f_cnatmp == .false. ) ) THEN
+            IF ( lccna == 0 .and. ( f_cnatmp .eqv. .false. ) ) THEN
               an(ix,1,kz,lccn) = qccn - ccw(ix,kz,jy)
            ELSE
               an(ix,1,kz,lccn) = qccn 
