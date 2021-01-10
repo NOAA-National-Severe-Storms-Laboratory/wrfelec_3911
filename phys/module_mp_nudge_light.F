@@ -12,9 +12,9 @@
          SUBROUTINE nudge_light(nx,ny,nz,qg,qv,gridlight,temp,press,dz,dx,dy,dt)
 
           implicit none
- #ifdef DM_PARALLEL
+#ifdef DM_PARALLEL
         INCLUDE 'mpif.h'
- #endif
+#endif
 
          real ::  RH= 0.95 ! minimum RH for nudging: larger RH -> larger grid volume activated for nudging
          real ::  QG_TRESH=0.003 ! threshold nudging on graupel mass to further constraint nudging volume.
