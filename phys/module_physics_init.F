@@ -225,7 +225,8 @@ CONTAINS
                          ,G_URB2D_mosaic,RN_URB2D_mosaic                                                      & ! danli mosaic 
                          ,TS_URB2D_mosaic                                                                     & ! danli mosaic 
                          ,TS_RUL2D_mosaic                                                                     & ! danli mosaic
-                         ,qnn_curr, F_QNN   &
+!                         ,qnn_curr   &
+!                         , F_QNN   &
                          )
 
 !-----------------------------------------------------------------
@@ -486,8 +487,8 @@ CONTAINS
    INTEGER, OPTIONAL, DIMENSION(ims:ime,  jms:jme), INTENT(OUT) :: CROPCAT
    REAL,    OPTIONAL, DIMENSION(ims:ime,5,jms:jme), INTENT(IN ) :: CROPTYPE
 
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ),  OPTIONAL,  INTENT(INOUT ) ::   qnn_curr
-   LOGICAL, OPTIONAL, intent(in) :: f_qnn
+!   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ),  OPTIONAL,  INTENT(INOUT ) ::   qnn_curr
+!   LOGICAL, OPTIONAL, intent(in) :: f_qnn
 
    INTEGER , OPTIONAL,  INTENT(OUT) :: STEPWTD
    REAL , OPTIONAL, INTENT(IN) :: WTDDT
@@ -1032,20 +1033,20 @@ integer myproc
                 its, ite, jts, jte, kts, kte                       )
    ENDIF
 
-   IF ( present( f_qnn ) ) THEN
+!   IF ( present( f_qnn ) ) THEN
    IF ( f_qnn ) THEN
 ! Initialize simple ccn field
-     IF ( qnn_curr((ite+itf)/2,(kte+ktf)/2,(jte+jtf)/2) < 1.0 ) THEN ! initialize ccn if not already done
+     IF ( scalar((ite+itf)/2,(kte+ktf)/2,(jte+jtf)/2,p_qnn) < 1.0 ) THEN ! initialize ccn if not already done
        DO j=jts,jtf
          DO k=kts,ktf
           DO i=its,itf
            IF ( config_flags%mp_physics == wdm5scheme .or. config_flags%mp_physics == wdm6scheme ) THEN
-             qnn_curr(i,k,j) = ccn_conc
+             scalar(i,k,j,p_qnn) = ccn_conc
            ELSEIF ( config_flags%mp_physics == nssl_2momccn ) THEN
-             qnn_curr(i,k,j) = nssl_cccn/1.225
+             scalar(i,k,j,p_qnn) = nssl_cccn/1.225
              ccn_conc =  nssl_cccn/1.225
            ELSE
-             qnn_curr(i,k,j) = ccn_conc
+             scalar(i,k,j,p_qnn) = ccn_conc
            ENDIF
           ENDDO
          ENDDO
@@ -1054,7 +1055,7 @@ integer myproc
    ENDIF
    ENDIF
    
-  ENDIF !}
+!  ENDIF !}
 
 !-- convert zfull and zhalf to sigma values for ra_init (Eta CO2 needs these)
 !-- zfull/zhalf may be either zeta or eta
